@@ -1,9 +1,9 @@
 {
-  "name": "stinchjack/c5_helper",
+  "name": "stinchjack/helper",
   "description": "Helper classes for Concrete5 V8",
   "type": "concrete5-package",
   "license": "LGPL-3.0-or-later",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "authors": [
       {
           "name": "Jack Stinchcombe",
