@@ -1,7 +1,7 @@
 <?php
 namespace Helper\Permissions;
 defined('C5_EXECUTE') or die('Access Denied.');
-
+use Helper\Permissions\PermissionHelper;
 use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Page\Controller\PageTypeController;
 use Concrete\Core\Area\Area;
@@ -15,7 +15,7 @@ use Concrete\Core\Permission\Access\AddBlockBlockTypeAccess;
 // see https://legacy-documentation.concrete5.org/tutorials/programmatically-setting-advanced-permissions
 
 
-class BlockTypePermissionHelper extends PermissionHelper {
+class BlockTypePermissionHelper extends \Helper\Permissions\PermissionHelper {
 
   //private $groupAccessEntities = [];
   private $block;
