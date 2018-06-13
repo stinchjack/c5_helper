@@ -7,7 +7,7 @@ class Controller extends \Package
 {
     protected $pkgHandle = 'helper'; //<--must match package name
     protected $appVersionRequired = '8.3.2';
-    protected $pkgVersion = '0.2.6';
+    protected $pkgVersion = '0.2.7';
 
     // see https://documentation.concrete5.org/developers/packages/adding-custom-code-to-packages
     protected $pkgAutoloaderRegistries = array(
