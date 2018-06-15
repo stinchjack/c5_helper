@@ -19,7 +19,7 @@ defined('C5_EXECUTE') or die('Access Denied.');
     <th>Installed Package handle</th>
     <th>C5 package version</th>
     <th>Composer version</th>
-    <th>composer.json version</th>
+    <th>Package install time</th>
     <th>Latest git commit</th>
     <th>Comment</th>
   </tr>
@@ -38,7 +38,7 @@ defined('C5_EXECUTE') or die('Access Denied.');
       print '<td>' . $row->composerVersion . '</td>';
       print '<td>' . date('D/m/Y H:i:s', $row->c5InstallDate). '</td>';
       print '<td>' . date('D/m/Y H:i:s', $row->gitCommitDate). '</td>';
-      print '<td>' . $row->comment . '</td>';
+      print '<td><ul>' . $row->comment . '</ul></td>';
 
 
       echo ('</tr>');

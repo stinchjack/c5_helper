@@ -1,24 +1,24 @@
 <?php
 
 namespace Concrete\Package\Helper; //<--must match package name
+use Concrete\Core\Page\Single as SinglePage;
+use \Concrete\Core\Package\Package;
 use Page;
-use Package;
 use Config;
-use SinglePage;
 
-class Controller extends \Package
+class Controller extends Package
 {
 
     protected $pkgHandle = 'exporter'; //<--must match package name
     protected $appVersionRequired = '8.3.2';
-    protected $pkgVersion = '0.4.16';
+    protected $pkgVersion = '0.4.19';
 
 
     // see https://documentation.concrete5.org/developers/packages/adding-custom-code-to-packages
     protected $pkgAutoloaderRegistries = array(
         'src/Helper/Permissions/' => '\Helper\Permissions',
         'src/Helper/ComposerJson/' => '\Helper\ComposerJson',
-        'src/Helper/Block/' => '\Helper\Block'
+        'src/Helper/Block/' => '\Helper\Block',
     );
 
     public function getPackageDescription()

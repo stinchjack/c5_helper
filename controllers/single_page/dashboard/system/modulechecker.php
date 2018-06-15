@@ -2,12 +2,14 @@
 
 namespace Concrete\Package\Helper\Controller\SinglePage\Dashboard\System;
 use \Concrete\Core\Page\Controller\DashboardPageController;
+use Concrete\Core\Package\PackageList;
 use Package;
 use View;
 use Loader;
 use Log;
 use PageType;
 use Page;
+use Concrete\Core\Support\Facade\Application;
 
 use Concrete\Core\Package\BrokenPackage;
 
@@ -17,6 +19,7 @@ class Modulechecker extends DashboardPageController
     public function on_start() {
       // will be run prior to any URL-based methods.
       parent::on_start();
+
     }
 
     public function on_before_render() {
@@ -26,35 +29,47 @@ class Modulechecker extends DashboardPageController
 
     public function view()
     {
-      $packageObjects = PackageList::getPackages();
 
-      die(count($packageObjects));
+
+      $pkgHandles = $this->getAllPackageHandles();
 
       $data = [];
 
-      foreach ($packageObjects as $pkg) {
-        $pkgdata = Object();
+      foreach ($pkgHandles as $pkgHandle) {
+          $pkg = Package::getByHandle($pkgHandle);
+          $pkgdata = new \stdClass();
           $pkgdata->handle = $pkg->getPackageHandle();
           $pkgdata->c5Version = $pkg->getPackageVersion();
           $pkgdata->path = $pkg->getPackagePath();
-          $pkgdata->c5InstallDate = strtotime(getPackageInstallDate ($pkgdata->handle));
-          $pkgdata->composerVersion = getComposerVersion($pkgdata->path);
-          $pkgdata->gitCommitDate = getLastCommit($pkgdata->path);
+          $pkgdata->c5InstallDate = strtotime($this->getPackageInstallDate ($pkgdata->handle));
+          $pkgdata->composerVersion = $this->getComposerVersion($pkgdata->path);
+          $pkgdata->gitCommitDate = $this->getLastCommit($pkgdata->path);
           $pkgdata->error = false;
+          $pkgdata->comment = '';
+
+          if ($pkgdata->composerVersion === null) {
+            $pkgdata->comment .= '<li>no composer file present</li>';
+          }
+
+          if ($pkgdata->composerVersion === false) {
+            $pkgdata->comment .= '<li>could not get data from composer file</li>';
+            $pkgdata->error = true;
+          }
 
           if ($pkgdata->gitCommitDate < $pkgdata->c5InstallDate) {
             $pkgdata->error = true;
-            $pkgdata->comment = 'check latest version is commited to repo';
+            $pkgdata->comment .= '<li>check latest version is commited to repo</li>';
           }
 
-          if ($pkgdata->c5Verion != $pkgdata->composerVersion) {
+          if ($pkgdata->composerVersion &&
+            trim($pkgdata->c5Version) != trim($pkgdata->composerVersion)) {
             $pkgdata->error = true;
-            $pkgdata->comment = 'c5 version and composer.json version do not match';
+            $pkgdata->comment .= '<li>c5 version and composer.json version do not match</li>';
           }
 
           if ($pkg instanceof BrokenPackage)  {
             $pkgdata->error = true;
-            $pkgdata->comment = 'instance of BrokenPackage';
+            $pkgdata->comment .= '<li>instance of BrokenPackage</li>';
           }
 
           $data[] = $pkgdata;
@@ -65,7 +80,13 @@ class Modulechecker extends DashboardPageController
 
     }
 
+    private function hasGitRepo($path) {
+      return file_exists($path . '/.git');
+
+    }
+
     private function getLastCommit($path) {
+
       $cwd = getcwd();
       chdir ($path);
       $gitResult = shell_exec('git log -1 --format=%cd');
@@ -96,6 +117,20 @@ class Modulechecker extends DashboardPageController
 
       $row = $r->fetch();
       return ($row['pkgDateInstalled']);
+
+    }
+
+    private function getAllPackageHandles() {
+
+      $app = Application::getFacadeApplication();
+      $db = $app->make('database')->connection();
+      $r = $db->executeQuery('select pkgHandle from Packages');
+
+      $handles = [];
+      while ($row = $r->fetch()) {
+        $handles[]  = $row['pkgHandle'];
+      }
+      return $handles;
 
     }
 }
