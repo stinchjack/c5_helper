@@ -11,7 +11,7 @@ class Controller extends \Package
 
     protected $pkgHandle = 'exporter'; //<--must match package name
     protected $appVersionRequired = '8.3.2';
-    protected $pkgVersion = '0.4.14';
+    protected $pkgVersion = '0.4.16';
 
 
     // see https://documentation.concrete5.org/developers/packages/adding-custom-code-to-packages

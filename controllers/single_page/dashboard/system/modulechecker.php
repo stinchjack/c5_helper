@@ -6,24 +6,12 @@ use Package;
 use View;
 use Loader;
 use Log;
-use Concrete\Core\Backup\ContentImporter;
-use \Concrete\Core\Page\Template;
-use \Concrete\Core\Page\Feed;
-use \Concrete\Core\Page\Type\Type;
-use \Concrete\Core\Tree\Type\Topic;
-use \Concrete\Core\Attribute\Key\CollectionKey as CollectionAttributeKey;
 use PageType;
 use Page;
-use Concrete\Core\Tree\Tree;
-// not to be confused with Concrete\Core\Entity\Site\Tree
-use Concrete\Core\Support\Facade\Application;
 
-use Concrete\Core\Page\Theme\Theme;
-use Concrete\Core\Permission\Access\Entity\Type as AccessEntityType;
-use Concrete\Core\User\Group\Group;
 use Concrete\Core\Package\BrokenPackage;
 
-class Modulecheker extends DashboardPageController
+class Modulechecker extends DashboardPageController
 {
 
     public function on_start() {
