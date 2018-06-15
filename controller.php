@@ -2,16 +2,16 @@
 
 namespace Concrete\Package\Helper; //<--must match package name
 use Page;
-use Helper\ComposerJson\PackageInfo;
-
-
+use Package;
+use Config;
+use SinglePage;
 
 class Controller extends \Package
 {
 
     protected $pkgHandle = 'exporter'; //<--must match package name
     protected $appVersionRequired = '8.3.2';
-    protected $pkgVersion = '0.3.34';
+    protected $pkgVersion = '0.4.14';
 
 
     // see https://documentation.concrete5.org/developers/packages/adding-custom-code-to-packages
@@ -41,32 +41,59 @@ class Controller extends \Package
       return [];
     }
 
-    public function install()
-    {
-        $pkg = parent::install();
+    private function setup() {
+      $this->env = Config::getEnvironment();
+      if ($this->env == 'local') {
+          $this->verbose = true;
+      }
+
+    }
+
+    public function install() {
+      $this->setup();
+      $pkg = parent::install();
+      if ($this->env == 'local') {
         $this->installSinglePage($pkg);
+      }
     }
 
     public function upgrade () {
-
+      $this->setup();
       $pkg = Package::getByHandle($this->pkgHandle);
 
-      $exportPage=Page::getByPath('/dashboard/system/export');
-      if ($exportPage) {
-        $exportPage->delete(); // this works
-      }
+      if ($this->env == 'local') {
+        $page=Page::getByPath('/dashboard/system/modulechecker');
+        if ($page) {
+          if ($this->verbose) {
+            print "deleting previous version ... \r\n";
+          }
+          $page->delete(); // this works
+        }
 
-      $this->installSinglePage($pkg);
+        $this->installSinglePage($pkg);
+      }
 
       parent::upgrade();
 
     }
 
     private function installSinglePage(&$pkg) {
-      $page=Page::getByPath('/dashboard/system/export');
-      if (!$page) {
-        $rval = SinglePage::add('/dashboard/system/export', $pkg);
+      if ($this->verbose) {
+        print "install SinglePage function ... \r\n";
       }
+
+      $page=Page::getByPath('/dashboard/system/modulechecker');
+      if ($page) {
+        $page->delete();
+      }
+
+
+      if ($this->verbose) {
+        print "adding singlepage ... \r\n";
+      }
+
+      $rval = SinglePage::add('/dashboard/system/modulechecker', $pkg);
+
     }
 
   }

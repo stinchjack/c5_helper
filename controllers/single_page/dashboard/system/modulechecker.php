@@ -40,6 +40,8 @@ class Modulecheker extends DashboardPageController
     {
       $packageObjects = PackageList::getPackages();
 
+      die(count($packageObjects));
+
       $data = [];
 
       foreach ($packageObjects as $pkg) {
@@ -54,12 +56,12 @@ class Modulecheker extends DashboardPageController
 
           if ($pkgdata->gitCommitDate < $pkgdata->c5InstallDate) {
             $pkgdata->error = true;
-            $pkgdata->comment = 'check latest version is commited to repo'.
+            $pkgdata->comment = 'check latest version is commited to repo';
           }
 
           if ($pkgdata->c5Verion != $pkgdata->composerVersion) {
             $pkgdata->error = true;
-            $pkgdata->comment = 'c5 version and composer.json version fdo not match';
+            $pkgdata->comment = 'c5 version and composer.json version do not match';
           }
 
           if ($pkg instanceof BrokenPackage)  {
@@ -69,6 +71,7 @@ class Modulecheker extends DashboardPageController
 
           $data[] = $pkgdata;
       }
+
 
       $this->set('moduleData', $data);
 
@@ -104,10 +107,7 @@ class Modulecheker extends DashboardPageController
       $r = $db->executeQuery('select pkgDateInstalled from Packages where pkgHandle = ? limit 1', array($handle));
 
       $row = $r->fetch();
-      return $row['pkgDateInstalled']);
+      return ($row['pkgDateInstalled']);
 
     }
-}
-
-
 }

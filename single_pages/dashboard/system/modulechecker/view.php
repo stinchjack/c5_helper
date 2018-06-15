@@ -24,23 +24,26 @@ defined('C5_EXECUTE') or die('Access Denied.');
     <th>Comment</th>
   </tr>
 <?php
-  foreach ($moduleData as $row) {
-  if ($row->error) {
-    echo <tr style = "background-color:PaleVioletRed;">
+  if (is_array($moduleData)) {
+    foreach ($moduleData as $row) {
+      if ($row->error) {
+        echo '<tr style = "background-color:PaleVioletRed;">';
+      }
+      else {
+        echo '<tr>';
+      }
+
+      print '<td>' . $row->handle . '</td>';
+      print '<td>' . $row->c5Version . '</td>';
+      print '<td>' . $row->composerVersion . '</td>';
+      print '<td>' . date('D/m/Y H:i:s', $row->c5InstallDate). '</td>';
+      print '<td>' . date('D/m/Y H:i:s', $row->gitCommitDate). '</td>';
+      print '<td>' . $row->comment . '</td>';
+
+
+      echo ('</tr>');
+    }
   }
-  else {
-    echo '<tr>';
-  }
-
-  print '<td>' . $row->handle . '</td>';
-  print '<td>' . $row->c5Version . '</td>';
-  print '<td>' . $row->composerVersion . '</td>';
-  print '<td>' . date('D/m/Y H:i:s', $row->c5InstallDate). '</td>';
-  print '<td>' . date('D/m/Y H:i:s', $row->gitCommitDate). '</td>';
-  print '<td>' . $row->comment . '</td>';
-
-
-  echo ('</tr>');
 ?>
 
 </table>
