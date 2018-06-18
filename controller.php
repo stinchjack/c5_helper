@@ -11,7 +11,7 @@ class Controller extends Package
 
     protected $pkgHandle = 'exporter'; //<--must match package name
     protected $appVersionRequired = '8.3.2';
-    protected $pkgVersion = '0.4.19';
+    protected $pkgVersion = '0.5.0';
 
 
     // see https://documentation.concrete5.org/developers/packages/adding-custom-code-to-packages
@@ -19,6 +19,7 @@ class Controller extends Package
         'src/Helper/Permissions/' => '\Helper\Permissions',
         'src/Helper/ComposerJson/' => '\Helper\ComposerJson',
         'src/Helper/Block/' => '\Helper\Block',
+        'src/Helper/Get/' => '\Helper\Get',
     );
 
     public function getPackageDescription()
