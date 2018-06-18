@@ -13,7 +13,6 @@ abstract class LDJsonPageTypeController extends PageTypeController {
     $this->makeSchema();
     parent::on_start();
 
-
   }
 
 }
