@@ -9,7 +9,7 @@ use Helper\Get\Get;
 trait LdJsonTrait {
 
   abstract protected function schemaType() : string;
-  abstract protected function schemaProperties() : array;
+  abstract protected function schemaProperties($fieldData) : array;
 
 
   private  function makeSchema() {
@@ -25,16 +25,24 @@ trait LdJsonTrait {
     //$this->setSchemaId();
 
     $fieldData = $this->getDbfields();
-    $this->setRootSchemaProperties($fieldData);
-    //$this->set('LdJson', $this->getLDJson());
 
+    $propertyValues = $this->schemaProperties($fieldData);
 
+    //die(implode (', ', array_keys($propertyValues)));
+    foreach ($propertyValues as $propertyName=>$value) {
+      $this->schemaObject->$propertyName($value);
+    }
+
+    $this->set('LDJson', $this->getLDJson());
   }
+
+
   private function getDbfields() {
     if ($this instanceof Concrete\Core\Block\BlockController) {
       $fieldData = Get::blockControllerFields($this);
       return $fieldData;
     }
+    else return null;
   }
 
   private function setSchemaId($schema){
@@ -61,19 +69,6 @@ trait LdJsonTrait {
       $subSchema->$property($value);
     }
   }
-
-  private function setRootSchemaProperties() {
-
-    $propertyValues = $this->schemaProperties();
-    die("zzzzzzz");
-
-    die(implode (', ', array_keys($propertyValues)));
-    foreach ($propertyValues as $propertyName=>$value) {
-      $this->schemaObject->$propertyName($value);
-    }
-  }
-
-
 
   private function setSchemaProperty($schemaObject, $property, $value) {
     $schemaObject->$property($value);
