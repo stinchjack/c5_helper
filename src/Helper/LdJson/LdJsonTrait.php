@@ -33,6 +33,8 @@ trait LdJsonTrait {
       $this->schemaObject->$propertyName($value);
     }
 
+    $this->setSchemaId();
+
     $this->set('LDJson', $this->getLDJson());
   }
 
@@ -46,34 +48,33 @@ trait LdJsonTrait {
 
     }
     else {
-      
+
       return null;
     }
   }
 
-  private function setSchemaId($schema){
+  private function setSchemaId($schemaObject = null){
+    if (!$schemaObject) {
+      $schemaObject = $this->schemaObject;
+    }
     $page = \Page::getCurrentPage();
     if (!$page) {
       return false;
     }
     $id = $page->getCollectionLink(true); //always use page URL as id
-    $this->schemaObject->setProperty('@id', $id);
+    $schemaObject->setProperty('@id', $id);
     return true;
   }
 
   protected function makeSchemaProperty($type, $propertyValues=[]) {
-    $subSchema = $this->makeSchema($type);
 
-    if ($type instanceof BaseType) {
-      $subSchema = $type;
-    }
-    else {
-      $type = trim($type);
-      $subSchema = Schema::$type();
-    }
+    $type = trim($type);
+    $subSchema = Schema::$type();
+
     foreach ($propertyValues as $propertyName=>$value) {
-      $subSchema->$property($value);
+      $subSchema->$propertyName($value);
     }
+    return $subSchema;
   }
 
   private function setSchemaProperty($schemaObject, $property, $value) {
