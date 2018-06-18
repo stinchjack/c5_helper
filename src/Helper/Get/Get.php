@@ -7,7 +7,7 @@ class Get {
   /*
     return database row associated with BlockController object
   */
-  public static blockControllerFields($blockControllerObject) {
+  public static function blockControllerFields($blockControllerObject) {
     $blockObject = $blockControllerObject->getBlockObject();
     $bId = $blockObject->getBlockID();
     $dbTable = $blockControllerObject->getBlockTypeDatabaseTable();
@@ -18,6 +18,7 @@ class Get {
       array($dbTable, $bId));
 
     return $r->fetch();
+  }
 }
 
 ?>
