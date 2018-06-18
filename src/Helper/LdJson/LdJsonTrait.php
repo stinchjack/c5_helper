@@ -38,11 +38,17 @@ trait LdJsonTrait {
 
 
   private function getDbfields() {
-    if ($this instanceof Concrete\Core\Block\BlockController) {
+    if (is_a ($this, 'Concrete\Core\Block\BlockController') ||
+        is_subclass_of ($this,  'Concrete\Core\Block\BlockController')){
       $fieldData = Get::blockControllerFields($this);
+
       return $fieldData;
+
     }
-    else return null;
+    else {
+      
+      return null;
+    }
   }
 
   private function setSchemaId($schema){

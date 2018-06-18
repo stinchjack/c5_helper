@@ -2,6 +2,8 @@
 namespace Helper\Get;
 defined('C5_EXECUTE') or die('Access Denied.');
 
+use Concrete\Core\Support\Facade\Application;
+
 class Get {
 
   /*
@@ -12,10 +14,11 @@ class Get {
     $bId = $blockObject->getBlockID();
     $dbTable = $blockControllerObject->getBlockTypeDatabaseTable();
 
+
     $app = Application::getFacadeApplication();
     $db = $app->make('database')->connection();
-    $r = $db->executeQuery("select * from ? where bID = ?",
-      array($dbTable, $bId));
+    $r = $db->executeQuery('select * from ' . $dbTable . ' where bID = ?',
+      array($bId));
 
     return $r->fetch();
   }
