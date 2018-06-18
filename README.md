@@ -111,3 +111,43 @@ In view.php, add:
     echo $LDJson;
   ?>
 ```
+
+# Helper\\Block\\RestrictAreaBlockType
+
+Helps restrict an Area to a single block of a single BlockType
+by adding a block of the type, and removing delete Permissions
+for specified groups. Requires advanced permissions to be enabled.
+
+In the template, business as usual:
+```
+<?php
+  $a = new Area('Header');
+  $a->setAreaDisplayName('Header');
+  $a->setBlockLimit(1);
+  $a->display($c);  
+?>
+```
+
+In the controller, the following snippet adds an 'image' blockttype to the 'Header' area if the area is empty, removing delete permissions for 'Administrators' and 'Editors' groups.
+
+NB Administrators will still be able to delete the block and replace it with something else. Creating a separate group as such Editors will make this work.
+
+```
+class Home extends PageTypeController
+{
+
+    public function on_start() { ... }
+
+    public function view() {
+      $imageArea = Area::get($this->page, 'Header');
+
+      if ($imageArea) {
+        RestrictAreaBlockType::restrictPageAreaBlockType
+          ($this->page, Area::get($this->page, 'Header'), 'image', ['Editors', 'Administrators']);
+      }
+
+      // ... any other code ...
+
+    }
+}
+```
