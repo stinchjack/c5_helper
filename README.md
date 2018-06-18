@@ -133,6 +133,9 @@ In the controller, the following snippet adds an 'image' blockttype to the 'Head
 NB Administrators will still be able to delete the block and replace it with something else. Creating a separate group as such Editors will make this work.
 
 ```
+
+use Helper\Block\RestrictAreaBlockType;
+
 class Home extends PageTypeController
 {
 
